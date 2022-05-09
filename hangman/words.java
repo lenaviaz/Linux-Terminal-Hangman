@@ -36,11 +36,6 @@ public class words {
         }
         return theLetters;
     }
-    
-private static String[] names = { "Terminator", "Slicer","Ninja", "cow", "Robot", "littlegirl" };
-//String word = names[(int) (Math.random() * names.length)];
-
-    
 
 String word = myWord();
 
@@ -48,6 +43,9 @@ String word = myWord();
     int wrongCounter = 1;
     String theLetters = "";
     String [] wordArray = new String[word.length()];
+
+    List <String> guessedLetters = new ArrayList<String>();
+
     String[] parts = 
     {" ", " O", " ", "--", "|", "--", " /", " ", "\\"};
 
@@ -66,6 +64,13 @@ String word = myWord();
         }
         System.out.println();
 
+    }
+
+    public void printGuessedLetters(){
+        for(String a : guessedLetters){
+            System.out.print(a + " ");
+        }
+        System.out.println();
     }
 
     public void printMan(){
@@ -94,12 +99,20 @@ String word = myWord();
         }
     }
 
+    public void performCheck(String a){
+        for(int i = 0; i < guessedLetters.size(); i++){
+            if(guessedLetters.get(i).equals(a)){
+                return;
+            }
+        }
+        guessedLetters.add(a);
+    }
+
     public void play() throws IOException { 
     
    // String aaah = myWord();
    // System.out.print(aaah);
 
-    List <String> guessedLetters = new ArrayList<String>();
     
 
     int rightCounter = 0;
@@ -112,10 +125,12 @@ String word = myWord();
     //System.out.print(wrongCounter);
     boolean bool = false;
     
-    System.out.println("\n\n\nguess a letter");
+    System.out.println("\n\n\nWelcome to HangMan!!!!");
     printMan();
     System.out.println("");
     letters();
+    System.out.println("Guessed Letters: ");
+    printGuessedLetters();
     char guess = in.nextLine().charAt(0);
 
     if(guessedLetters.contains(String.valueOf(guess))){
@@ -129,7 +144,8 @@ String word = myWord();
     
              wordArray[i] = String.valueOf(word.charAt(i));
              rightCounter++;
-             guessedLetters.add(String.valueOf(guess));
+             //guessedLetters.add(String.valueOf(guess));----------
+             performCheck(String.valueOf(guess));
              bool = true;
     
              if(rightCounter == wordArray.length){
@@ -144,9 +160,8 @@ String word = myWord();
         }
     }
 
-
-
     if(bool == false){
+    performCheck(String.valueOf(guess));
     if(parts[parts.length - wrongCounter] == " "){
        // System.out.println("im deleting two!!!");
         parts[parts.length - wrongCounter] = " ";
@@ -155,14 +170,14 @@ String word = myWord();
     } else {
         parts[parts.length - wrongCounter] = " ";
         wrongCounter++;
-    }
+        }
     }
 
     printMan();
     System.out.print("\033[H\033[2J");
     } while(wrongCounter < 9);
 
-    System.out.print("you lost! Goodbye!");
+    System.out.println("you lost! The word was : " + word);
 
     in.close();
     }
